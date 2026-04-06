@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String?
+  phone        String?
+  avatarUrl    String?
+  passwordHash String
+  gender       Gender?
+  dateOfBirth  DateTime?
+  address      String?
+  weight       Float?
+  height       Float?
+  fitnessGoal  FitnessGoal?
+  occupation   String?
+  role         Role      @default(MEMBER)
+  
+  // Relations
+  trainerProfile TrainerProfile?
+  bookings       Booking[]
+  workouts       Workout[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model MembershipPlan {
+  id             String    @id @default(uuid())
+  name           String
+  price          Float
+  durationMonths Int
+  features       Json      // Array of strings, e.g., ["Gym Access", "Locker Room"]
+  isPopular      Boolean   @default(false)
+  
+  // Relations
+  bookings       Booking[]
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model TrainerProfile {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty    String
+  rating       Float     @default(5.0)
+  reviewCount  Int       @default(0)
+  monthlyRate  Float
+  imageUrl     String?
+
+  // Relations
+  bookings     Booking[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Booking {
+  id               String          @id @default(uuid())
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  membershipPlanId String
+  membershipPlan   MembershipPlan  @relation(fields: [membershipPlanId], references: [id], onDelete: Restrict)
+  trainerId        String?
+  trainer          TrainerProfile? @relation(fields: [trainerId], references: [id], onDelete: SetNull)
+  
+  status           BookingStatus   @default(PENDING)
+  paymentMethod    PaymentMethod
+  totalAmount      Float
+  startDate        DateTime        @default(now())
+  endDate          DateTime
+
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model Workout {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  type        String   @default("General")
+  description String?
+  date        DateTime
+  startTime   String   // e.g. "09:00"
+  endTime     String   // e.g. "10:30"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+  TRAINER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum FitnessGoal {
+  MUSCLE_GAIN
+  WEIGHT_LOSS
+  ENDURANCE
+  FLEXIBILITY
+  GENERAL
+}
+
+enum BookingStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  MOMO
+  VNPAY
+}

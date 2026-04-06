@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ff3d5e;
+  --color-primary-dark: #d62f4b;
+  --color-primary-light: #ff6b84;
+  --color-background-light: #f8f5f6;
+  --color-background-dark: #181012;
+  --color-surface-dark: #281b1d;
+  --color-surface-darker: #1f1416;
+  --color-surface-input: #2f1e21;
+  --color-border-dark: #3a272a;
+  --color-text-main: #ffffff;
+  --color-text-muted: #bc9aa0;
+
+  --font-display: "Lexend", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background-dark);
+    color: #f1f5f9;
+    /* slate-100 */
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: rgba(40, 27, 29, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 61, 94, 0.1);
+  }
+
+  /* Member Dashboard & Schedule Styles */
+  .glass-card {
+    background: rgba(255, 61, 94, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 61, 94, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 61, 94, 0.2);
+    border-color: rgba(255, 61, 94, 0.4);
+  }
+
+  .glass-card-blue {
+    background: rgba(59, 130, 246, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .glass-card-blue:hover {
+    background: rgba(59, 130, 246, 0.2);
+  }
+
+  .glass-card-green {
+    background: rgba(34, 197, 94, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+
+  .glass-card-green:hover {
+    background: rgba(34, 197, 94, 0.2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-background-dark);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-dark);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+  }
+}
